@@ -30,14 +30,9 @@ const Notice = () => {
 
   const [question, setQuestion] = useState([
     {
-      questionText: "which is the capital city of bangladesh?",
+      questionText: "Question",
       questionType: "radio",
-      options: [
-        { optionsText: "Dhaka" },
-        { optionsText: "Rangpur" },
-        { optionsText: "CTG" },
-        { optionsText: "Rajshahi" },
-      ],
+      options: [{ optionsText: "option 1" }],
       open: true,
       required: false,
     },
@@ -63,51 +58,17 @@ const Notice = () => {
           }),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to fetch");
+      } else {
+        // window.location.href = "/dashboard";
+        window.location.replace('/dashboard');
       }
-  
-      // const data = await response.json();
-      // console.log(data);
     } catch (error) {
       console.error("Error:", error.message);
     }
   };
-  
-
-  // const submitHandler = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:5000/create-notice/${id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "myworld " + window.localStorage.getItem("gsmToken"),
-  //         },
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch");
-  //     }
-
-  //     const data = await response.json();
-
-  //     // Assuming data is an object, you can directly add properties to it
-  //     const updatedData = {
-  //       ...data,
-  //       document_name: documentName,
-  //       doc_desc: documentDescription,
-  //       question: question,
-  //     };
-  //     console.log(data);
-  //     console.log(updatedData);
-  //   } catch (error) {
-  //     console.error("Error:", error.message);
-  //   }
-  // };
 
   function inputChangeHandler(text, i) {
     let newQuestion = [...question];
@@ -473,14 +434,15 @@ const Notice = () => {
           </div>
         </div>
         <div className="card-body ">{questionUI()}</div>
-        <Button
-          variant="contained"
-          color="primary"
-          className="fs-5"
-          onClick={submitHandler}
-        >
-          Save
-        </Button>
+        <div className=" py-3 px-3">
+          <button
+            className="btn btn-primary fw-bold fs-5"
+            onClick={submitHandler}
+          >
+            Save
+          </button>
+          <Button></Button>
+        </div>
       </div>
     </>
   );
