@@ -1,11 +1,12 @@
 const { json } = require("body-parser");
 const formModel = require("../model/formModel");
 const noticeboardController = {
-  all: async (req, res, next) => {
-    let data = await formModel.find();
+  all: async (req, res) => {
+    let data = await formModel.find().sort({_id:-1});
+    // console.log(data);
     return res.status(200).json(data);
   },
-  create: async (req, res, next) => {
+  create: async (req, res) => {
     try {
       const data = req.body;
       let response = await formModel.create({
@@ -23,17 +24,36 @@ const noticeboardController = {
       res.status(500).json({ message: "Error saving form data" });
     }
   },
-  update: (req, res, next) => {
+  update: (req, res) => {
     res.json("create notice");
   },
-  show:async (req, res, next) => {
-    const {id} = req.params.id
-  let data = await formModel.findOne({id})
-  // console.log(data);
-  return res.status(201).json(data)
+  show: async (req, res) => {
+    try {
+      let data = await formModel.findOne().where({
+        _id: req.params.id,
+      });
+      // console.log(data);
+      return res.status(200).json(data);
+    } catch (error) {
+      console.error("Error retrieving data:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   },
-  delete: (req, res, next) => {
-    res.json("create notice");
+  deleteItem: async(req, res) => {
+    let {id} = req.params
+    console.log(id);
+    let data = await formModel.deleteOne({
+      _id: id
+    })
+    console.log(data);
+    if(data.deletedCount){
+      return res.status(200).json("delete Item");
+
+  }else{
+      return res.status(400).json({
+          msg:'does not delete Item', data});
+  }
+    
   },
 };
 module.exports = noticeboardController;

@@ -12,7 +12,6 @@ import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import FilterNoneIcon from "@mui/icons-material/FilterNone";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
-// import Typography from "@mui/material/Typography";
 import { Typography } from "@mui/material";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -63,7 +62,7 @@ const Notice = () => {
         throw new Error("Failed to fetch");
       } else {
         // window.location.href = "/dashboard";
-        window.location.replace('/dashboard');
+        window.location.replace("/dashboard");
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -102,7 +101,7 @@ const Notice = () => {
     let addNewOptions = [...question];
     if (addNewOptions[i].options.length < 5) {
       addNewOptions[i].options.push({
-        optionsText: "options" + (addNewOptions[i].options.length + 1),
+        optionsText: "options " + (addNewOptions[i].options.length + 1),
       });
       setQuestion(addNewOptions);
     } else {
@@ -255,21 +254,23 @@ const Notice = () => {
                       <NumericIcon className="me-1" />
                       Number
                     </MenuItem>
-
+                    <MenuItem
+                      id="radio"
+                      value="Radio"
+                      onClick={() => addQuestionType(i, "radio")}
+                    >
+                      <Radio
+                        className=" me-1 text-secondary text-capitalize"
+                        checked
+                      />
+                      Single check
+                    </MenuItem>
                     <MenuItem
                       id="checkbox"
                       value="Checkbox"
                       onClick={() => addQuestionType(i, "checkbox")}
                     >
                       <Checkbox className=" me-1 text-secondary" checked />
-                      Checkbox
-                    </MenuItem>
-                    <MenuItem
-                      id="radio"
-                      value="Radio"
-                      onClick={() => addQuestionType(i, "radio")}
-                    >
-                      <Radio className=" me-1 text-secondary" checked />
                       Multiple choice
                     </MenuItem>
                   </Select>
@@ -412,11 +413,11 @@ const Notice = () => {
           <div class="mb-3">
             <input
               type="text"
-              class="fw-bold form-control fs-1 border-0"
+              class="fw-bold form-control fs-1 border-0 text-capitalize"
               name="form"
               id="form"
-              value={documentName}
-              // placeholder="Form Title"
+              // value={documentName}
+              placeholder={documentName}
               onChange={(e) => setdocumentName(e.target.value)}
             />
           </div>
@@ -424,11 +425,11 @@ const Notice = () => {
           <div class="mb-3">
             <input
               type="text"
-              class="form-control w-100 fs-5 border-0"
+              class="form-control w-100 fs-5 border-0 text-capitalize"
               name="description"
               id="description"
-              value={documentDescription}
-              // placeholder="sort description"
+              // value={documentDescription}
+              placeholder={documentDescription}
               onChange={(e) => setdocumentDescription(e.target.value)}
             />
           </div>

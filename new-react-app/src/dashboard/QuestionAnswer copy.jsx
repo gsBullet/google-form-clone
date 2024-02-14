@@ -40,51 +40,58 @@ const QuestionAnswer = () => {
           </div>
           {notice.questions.map((question, qIndex) => (
             <div className="card-body" key={qIndex}>
-              <Typography>
+              <Typography></Typography>
                 {question?.options?.map((op, index) => (
                   <div key={index}>
                     <div className="d-flex">
-                      <div>
-
-                     
-                      {question.questionType !== "radio" ? (
-                        question.questionType !== "text" ? (
-                          <label htmlFor="">
+                    <div>
+                      {question?.questionType !== "radio" ? (
+                        question?.questionType !== "text" ? (
+                          <label htmlFor={qIndex} >
                             <input
-                              type={question.questionType}
-                              value={op.optionsText}
-                              required={question.required}
+                              type={question?.questionType}
+                              value={op?.optionsText}
+                              required={question?.required}
+                              className="text-capitalize text-primary"
                               name={qIndex}
+                              id={qIndex}
                             />
-                            {op.optionsText}
+                            {' '}
+                            {op?.optionsText}
                           </label>
                         ) : (
-                          <label htmlFor="">
+                          <label htmlFor={qIndex} >
                             <input
-                              type={question.questionType}
-                              value={op.optionsText}
-                              required={question.required}
+                              type={question?.questionType}
+                              value={op?.optionsText}
+                              required={question?.required}
+                              className="text-capitalize text-primary"
                               name={qIndex}
+                              id={qIndex}
                             />
-                            {op.optionsText}
+                            {' '}
+                            {op?.optionsText}
                           </label>
                         )
                       ) : (
-                        <label htmlFor="">
+                        <label htmlFor={qIndex}>
                           <input
-                            type={question.questionType}
-                            value={op.optionsText}
-                            required={question.required}
+                            type={question?.questionType}
+                            value={op?.optionsText}
+                            required={question?.required}
+                            className="text-capitalize text-primary"
                             name={qIndex}
+                            id={qIndex}
                           />
-                          {op.optionsText}
+                          {' '}
+                          {op?.optionsText}
                         </label>
                       )}
                     </div>
                   </div>
                   </div>
                 ))}
-              </Typography>
+              
             </div>
           ))}
         </div>

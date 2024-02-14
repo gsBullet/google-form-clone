@@ -38,6 +38,7 @@
   width: 100%;
   font-weight: 400;
   font-style: 20px;
+  text-transform: capitalize;
 }
 .text_input.text_input:focus {
   border-bottom: 1px solid blueviolet;

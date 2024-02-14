@@ -4,8 +4,8 @@ const noticeboardController = require("../../controller/noticeboardController");
 const router = express.Router();
 
 router.post(`/create-notice/:id`, noticeboardController.create),
-  router.get("/all-notice", noticeboardController.all),
   router.get("/get-notice/:id", noticeboardController.show),
-  router.post("/update-notice", noticeboardController.update),
-  router.get("/delete-notice", noticeboardController.delete),
+  router.post("/update-notice/:id", noticeboardController.update),
+  router.get("/delete-notice/:id", noticeboardController.deleteItem),
+  router.get("/all-notice", noticeboardController.all),
   (module.exports = () => router);
