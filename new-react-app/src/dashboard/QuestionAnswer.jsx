@@ -26,7 +26,7 @@ const QuestionAnswer = () => {
         throw new Error("get notice data failed");
       }
       if (response.ok) {
-        console.log(data);
+        // console.log(data);
         setNotice(data);
       }
     } catch (error) {
@@ -64,7 +64,7 @@ const QuestionAnswer = () => {
                             name={qIndex}
                             className="text-primary mx-1"  
                             required={question.required}
-                            
+                            onChange={(e)=>selectCheck(e.target?.checked,question?.questionText,opText?.optionsText)}
                           />
                         ) : question?.questionType === "number" ? (
                           <SortNumericIcon className="me-1" />
@@ -87,6 +87,7 @@ const QuestionAnswer = () => {
                           className="text_input mx-1"
                           required={question.required}
                           placeholder= {opText?.optionsText}
+                          onChange={(e)=>selectInput(question?.questionText,e.target.value)}
                         />
 
                         )
@@ -98,7 +99,7 @@ const QuestionAnswer = () => {
             </div>
           ))}
 
-          <Button type="button" className="w-25 bg-success text-uppercase text-light hover my-5 btn">Submit</Button>
+          <Button type="button" onClick={submit} className="w-25 bg-success text-uppercase text-light hover my-5 btn">Submit</Button>
         </div>
       </div>
     </>

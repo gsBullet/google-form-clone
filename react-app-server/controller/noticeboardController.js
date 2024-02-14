@@ -41,11 +41,9 @@ const noticeboardController = {
   },
   deleteItem: async(req, res) => {
     let {id} = req.params
-    console.log(id);
     let data = await formModel.deleteOne({
       _id: id
     })
-    console.log(data);
     if(data.deletedCount){
       return res.status(200).json("delete Item");
 
