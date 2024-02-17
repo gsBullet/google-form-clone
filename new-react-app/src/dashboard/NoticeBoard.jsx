@@ -18,7 +18,7 @@ const NoticeBoard = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch");
       } else {
-        // console.log(data);
+        console.log(data);
         setNoticeData(data);
       }
     } catch (error) {

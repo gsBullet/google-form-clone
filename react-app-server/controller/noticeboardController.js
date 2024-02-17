@@ -2,7 +2,7 @@ const { json } = require("body-parser");
 const formModel = require("../model/formModel");
 const noticeboardController = {
   all: async (req, res) => {
-    let data = await formModel.find().sort({_id:-1});
+    let data = await formModel.find().sort({ _id: -1 });
     // console.log(data);
     return res.status(200).json(data);
   },
@@ -39,19 +39,19 @@ const noticeboardController = {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  deleteItem: async(req, res) => {
-    let {id} = req.params
+  deleteItem: async (req, res) => {
+    let { id } = req.params;
     let data = await formModel.deleteOne({
-      _id: id
-    })
-    if(data.deletedCount){
+      _id: id,
+    });
+    if (data.deletedCount) {
       return res.status(200).json("delete Item");
-
-  }else{
+    } else {
       return res.status(400).json({
-          msg:'does not delete Item', data});
-  }
-    
+        msg: "does not delete Item",
+        data,
+      });
+    }
   },
 };
 module.exports = noticeboardController;

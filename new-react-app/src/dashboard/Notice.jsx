@@ -26,7 +26,6 @@ import Select from "@mui/material/Select";
 
 const Notice = () => {
   const { id } = useParams();
-
   const [question, setQuestion] = useState([
     {
       questionText: "Question",
@@ -230,10 +229,9 @@ const Notice = () => {
                 <div className="addQuestionTop d-flex flex-row align-items-center justify-content-between">
                   <input
                     type="text"
-                    className="questionCSS fw-medium text-black "
-                    placeholder="Question"
+                    className="questionCSS fw-medium text-black "  
                     onChange={(e) => inputChangeHandler(e.target.value, i)}
-                    value={que.questionText}
+                    placeholder={que.questionText}
                   />
                   <CropOriginalIcon className="text-primary fs-4 mx-2" />
                   <Select className="select mt-2 ">
@@ -292,8 +290,8 @@ const Notice = () => {
                       <input
                         type="text"
                         className="text_input"
-                        placeholder="option"
-                        value={op.optionsText}
+                        
+                        placeholder={op.optionsText}
                         onChange={(e) => {
                           changeValueHandler(e.target.value, i, j);
                         }}
