@@ -10,8 +10,7 @@ const AuthContextProvider = ({ children }) => {
       Authorization: 'myworld '+window.localStorage.getItem('gsmToken')
     }
   })
-  let res = await req.json();
-  console.log(res);
+  await req.json();
   let status = await req.status;
   if(status===200){
     setcheckAuth({

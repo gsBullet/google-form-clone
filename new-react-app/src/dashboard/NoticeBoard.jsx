@@ -18,7 +18,7 @@ const NoticeBoard = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch");
       } else {
-        console.log(data);
+        // console.log(data);
         setNoticeData(data);
       }
     } catch (error) {
@@ -38,10 +38,9 @@ const NoticeBoard = () => {
         },
       });
       const data = await response.json();
-      console.log(data);
-      // if (response.ok) {
-      //   setNoticeData(data);
-      // }
+      if (response.ok) {
+        console.log(data);
+      }
     }
   };
 

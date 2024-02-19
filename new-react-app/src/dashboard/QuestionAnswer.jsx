@@ -11,10 +11,8 @@ const QuestionAnswer = () => {
   const [notice, setNotice] = useState([]);
   const [answer, setAnswer] = useState([
     {
-      questionText: "Question",
-      questionType: "radio",
-      options: [],
-      required: false,
+      questionText: "",
+      data: [],
     },
   ]);
   const questionReplay = async () => {
@@ -44,15 +42,31 @@ const QuestionAnswer = () => {
     questionReplay();
   }, []);
 
-  const selectInput = (qText, option, qIndex, qType) => {
-    const newAnswer = [answer];
-    newAnswer[qIndex].options = option;
-    newAnswer[qIndex].questionText = qText;
-    newAnswer[qIndex].questionType = qType;
-    setAnswer([...newAnswer,newAnswer]);
-    console.log(answer);
+  const selectInput = (qText, value, qIndex) => {
+    const newAnswer = [...answer]; // Shallow copy of the answer array
+    if (!Array.isArray(newAnswer[qIndex])) {
+      newAnswer[qIndex] = []; // Initialize as an array if not already
+    }
+    newAnswer[qIndex].push({
+      questionText: qText,
+      data: value,
+    });
+
+    setAnswer(newAnswer); // Update the state with the modified newAnswer
+    // Log the modified newAnswer
   };
-  const selectCheck = (checkedValue, qText, option, index) => {};
+  const selectCheck = (qText, value, qIndex) => {
+    const newAnswer = [...answer]; // Shallow copy of the answer array
+    if (!Array.isArray(newAnswer[qIndex])) {
+      newAnswer[qIndex] = []; // Initialize as an array if not already
+    }
+    newAnswer[qIndex].push({
+      questionText: qText,
+      data: value,
+    });
+
+    setAnswer(newAnswer); // Update the state with the modified newAnswer
+  };
 
   const submit = async () => {
     try {
@@ -71,13 +85,12 @@ const QuestionAnswer = () => {
           }),
         }
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch");
+      let data = await response.json();
+      if (response.ok) {
+        console.log(data);
+        window.location.href = "/dashboard";
       } else {
-        // window.location.href = "/dashboard";
-        // window.location.replace("/dashboard");
-        console.log('hello');
+        throw new Error("Failed to fetch");
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -89,8 +102,10 @@ const QuestionAnswer = () => {
       <div className="container">
         <div className="card">
           <div className="card-header">
-            <Typography>{notice.document_name}</Typography>
-            <Typography>{notice.doc_desc}</Typography>
+            <Typography className="text-center">
+              {notice.document_name}
+            </Typography>
+            <Typography className="text-center">{notice.doc_desc}</Typography>
           </div>
           {notice?.questions?.map((question, qIndex) => (
             <div className="card-body" key={qIndex}>
@@ -106,14 +121,13 @@ const QuestionAnswer = () => {
                         question.questionType !== "number" ? (
                           <input
                             type={question.questionType}
-                            name={qIndex}
+                            name={opText.optionsText}
                             className="text-primary mx-1"
                             required={question.required}
-                            onChange={(e) =>
+                            onChange={() =>
                               selectCheck(
-                                e.target?.checked,
                                 question?.questionText,
-                                opText?.optionsText,
+                                opText.optionsText,
                                 qIndex
                               )
                             }
@@ -141,8 +155,8 @@ const QuestionAnswer = () => {
                               selectInput(
                                 question?.questionText,
                                 e.target.value,
-                                qIndex,
-                                question?.questionType
+                                qIndex
+                                // question?.questionType
                               )
                             }
                           />

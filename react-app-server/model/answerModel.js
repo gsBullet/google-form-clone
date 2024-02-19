@@ -11,6 +11,10 @@ module.exports = mongoose.model(
       type: String,
       required: true,
     },
+    noticeId:{
+      type:String,
+      required:true
+    },
     answers: [],
   })
 );

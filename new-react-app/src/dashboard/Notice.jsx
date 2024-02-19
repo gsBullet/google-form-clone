@@ -431,6 +431,47 @@ const Notice = () => {
               onChange={(e) => setdocumentDescription(e.target.value)}
             />
           </div>
+          <div className="d-flex justify-content-around align-items-center gap-3">
+          <div class="mb-3 w-25">
+            <label for="" class="form-label">Notice Type</label>
+            <select
+              class="form-select"
+              name="noticeType"
+              id="noticeType"
+              required
+            >
+              <option selected>Select one</option>
+              <option value="1">Ones</option>
+              <option value="7">Weekly</option>
+              <option value="10">Occation</option>
+            </select>
+          </div>
+          <div class="mb-3 w-25">
+            <label for="" class="form-label">Start Dadeline</label>
+            <input
+              type="date"
+              class="form-control"
+              name="startDadeline"
+              id="startDadeline"
+              placeholder=""
+            />
+          </div>
+          <div class="mb-3 w-25">
+            <label for="" class="form-label">End Dadeline</label>
+            <input
+              type="date"
+              class="form-control"
+              name="endDadeline"
+              id="endDadeline"
+              placeholder=""
+            />
+          </div>
+          
+
+          </div>
+          
+          
+          
         </div>
         <div className="card-body ">{questionUI()}</div>
         <div className=" py-3 px-3">
