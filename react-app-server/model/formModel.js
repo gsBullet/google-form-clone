@@ -1,3 +1,4 @@
+const { Timestamp } = require("mongodb");
 const { default: mongoose } = require("mongoose");
 
 module.exports = mongoose.model(
@@ -7,10 +8,19 @@ module.exports = mongoose.model(
       type: String,
       required: true,
     },
-    doc_desc: {
+    range: {
+      type: String,
+      required: true,
+    },
+    startDadeline: {
+      type: String,
+      required: true,
+    },
+
+    endDadeline: {
       type: String,
       required: true,
     },
     questions: [],
-  })
+  },{timestamps:true})
 );

@@ -35,9 +35,14 @@ const Notice = () => {
       required: false,
     },
   ]);
-  const [documentDescription, setdocumentDescription] =
-    useState("Add Desctiption");
+  const [documentDescription, setdocumentDescription] = useState(
+    "Add Sort Desctiption"
+  );
   const [documentName, setdocumentName] = useState("Untitled Document");
+  const [range, setRange] = useState();
+  const [startDadeline, setStartDadeline] = useState();
+  const [endDadeline, setEndDadeline] = useState();
+  const [error, setError] = useState([]);
 
   const submitHandler = async () => {
     try {
@@ -53,11 +58,17 @@ const Notice = () => {
             document_name: documentName,
             doc_desc: documentDescription,
             question: question,
+            range: range,
+            startDadeline: startDadeline,
+            endDadeline: endDadeline,
           }),
         }
       );
-
+      let data = await response.json();
+      let jData = JSON.stringify(data?.errors);
+      console.log(error);
       if (!response.ok) {
+        setError(jData);
         throw new Error("Failed to fetch");
       } else {
         // window.location.href = "/dashboard";
@@ -67,7 +78,9 @@ const Notice = () => {
       console.error("Error:", error.message);
     }
   };
-
+  const rangeHandler = (e) => {
+    setRange(e.target.value);
+  };
   function inputChangeHandler(text, i) {
     let newQuestion = [...question];
     newQuestion[i].questionText = text;
@@ -229,7 +242,7 @@ const Notice = () => {
                 <div className="addQuestionTop d-flex flex-row align-items-center justify-content-between">
                   <input
                     type="text"
-                    className="questionCSS fw-medium text-black "  
+                    className="questionCSS fw-medium text-black "
                     onChange={(e) => inputChangeHandler(e.target.value, i)}
                     placeholder={que.questionText}
                   />
@@ -290,7 +303,6 @@ const Notice = () => {
                       <input
                         type="text"
                         className="text_input"
-                        
                         placeholder={op.optionsText}
                         onChange={(e) => {
                           changeValueHandler(e.target.value, i, j);
@@ -432,46 +444,60 @@ const Notice = () => {
             />
           </div>
           <div className="d-flex justify-content-around align-items-center gap-3">
-          <div class="mb-3 w-25">
-            <label for="" class="form-label">Notice Type</label>
-            <select
-              class="form-select"
-              name="noticeType"
-              id="noticeType"
-              required
-            >
-              <option selected>Select one</option>
-              <option value="1">Ones</option>
-              <option value="7">Weekly</option>
-              <option value="10">Occation</option>
-            </select>
+            <div class="mb-3 w-25">
+              <label for="" class="form-label">
+                Notice Type
+              </label>
+              <select
+                class="form-select"
+                name="noticeType"
+                id="noticeType"
+                required
+                value={range}
+                onChange={rangeHandler}
+              >
+                <option selected>Select one</option>
+                <option value="1">Ones</option>
+                <option value="7">Weekly</option>
+                <option value="10">Occation</option>
+              </select>
+            </div>
+            <div class="mb-3 w-25">
+              <label for="" class="form-label">
+                Start Dadeline
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                name="startDadeline"
+                id="startDadeline"
+                onChange={(e) => setStartDadeline(e.target.value)}
+              />
+            </div>
+            <div class="mb-3 w-25">
+              <label for="" class="form-label">
+                End Dadeline
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                name="endDadeline"
+                id="endDadeline"
+                placeholder=""
+                onChange={(e) => setEndDadeline(e.target.value)}
+              />
+            </div>
           </div>
-          <div class="mb-3 w-25">
-            <label for="" class="form-label">Start Dadeline</label>
-            <input
-              type="date"
-              class="form-control"
-              name="startDadeline"
-              id="startDadeline"
-              placeholder=""
-            />
-          </div>
-          <div class="mb-3 w-25">
-            <label for="" class="form-label">End Dadeline</label>
-            <input
-              type="date"
-              class="form-control"
-              name="endDadeline"
-              id="endDadeline"
-              placeholder=""
-            />
-          </div>
-          
-
-          </div>
-          
-          
-          
+        <div>
+          {error?.map((err, index) => (
+            <div key={index}>
+              <p>Type: {err.type}</p>
+              <p>Message: {err.msg}</p>
+              <p>Path: {err.path}</p>
+              <p>Location: {err.location}</p>
+            </div>
+          ))}
+        </div>
         </div>
         <div className="card-body ">{questionUI()}</div>
         <div className=" py-3 px-3">

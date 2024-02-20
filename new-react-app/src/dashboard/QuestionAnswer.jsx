@@ -108,13 +108,13 @@ const QuestionAnswer = () => {
             <Typography className="text-center">{notice.doc_desc}</Typography>
           </div>
           {notice?.questions?.map((question, qIndex) => (
-            <div className="card-body" key={qIndex}>
+            <div className="card-body col-lg-6 col-md-8 col-sm-12 m-auto border  shadow mt-3" key={qIndex}>
               <Typography>
                 {qIndex + 1}. {question?.questionText}{" "}
               </Typography>
               {question?.options?.map((opText, index) => (
                 <div key={index}>
-                  <div className="d-flex">
+                  <div className="d-flex align-items-center">
                     <FormControlLabel
                       control={
                         question.questionType !== "text" &&
@@ -141,7 +141,7 @@ const QuestionAnswer = () => {
                       label={
                         question.questionType !== "text" &&
                         question.questionType !== "number" ? (
-                          <Typography className="text-capitalize">
+                          <Typography className="text-capitalize text-center">
                             {opText?.optionsText}
                           </Typography>
                         ) : (
@@ -168,14 +168,14 @@ const QuestionAnswer = () => {
               ))}
             </div>
           ))}
-
-          <button
-            type="button"
-            onClick={submit}
-            className="w-25 bg-success text-uppercase text-light hover my-5 btn"
-          >
-            Submit
-          </button>
+          <div className="col-lg-6 col-md-8 col-sm-10 m-auto">
+            <button
+              onClick={submit}
+              className="btn btn-sm btn-success text-uppercase text-light hover my-5 mx-5 btn"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </>

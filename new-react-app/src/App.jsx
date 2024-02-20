@@ -9,8 +9,8 @@ import Notice from "./dashboard/Notice";
 import NoticeBoard from "./dashboard/NoticeBoard";
 import AuthContextProvider from "./contexts/AuthContext";
 import AuthRoutes from "./routes/AuthRoutes";
-import { StateProvider } from "./components/StateProvider";
-import reducer, { initialState } from "./components/reducer";
+// import { StateProvider } from "./components/StateProvider";
+// import reducer, { initialState } from "./components/reducer";
 import NoticeTable from "./dashboard/QuestionAnswer";
 // import { StateProvider } from "./components/StateProvider";
 // import reducer, { initialState } from "./components/reducer";
@@ -37,15 +37,8 @@ function App() {
             }
           >
             <Route index element={<NoticeBoard />} />
-            <Route
-              path={`notice/:id`}
-              element={
-                <StateProvider initialState={initialState} reducer={reducer}>
-                  <Notice />{" "}
-                </StateProvider>
-              }
-            />
-            <Route path={`notice-answer/:id`} element={<NoticeTable/>} />
+            <Route path={`notice/:id`} element={<Notice />} />
+            <Route path={`notice-answer/:id`} element={<NoticeTable />} />
           </Route>
         </Routes>
       </BrowserRouter>

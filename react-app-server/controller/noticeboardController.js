@@ -1,5 +1,43 @@
 const { json } = require("body-parser");
 const formModel = require("../model/formModel");
+const { body, validationResult } = require("express-validator");
+
+const questionValidator = async (req) => {
+  await body("document_name")
+    .not()
+    .isEmpty()
+    .withMessage("document name is required")
+    .run(req);
+  await body("doc_desc")
+    .not()
+    .isEmpty()
+    .withMessage("document desc is required")
+    .run(req);
+  await body("questions")
+    .not()
+    .isEmpty()
+    .withMessage("questions is required")
+    .run(req);
+  await body("range").not().isEmpty().withMessage("range is required").run(req);
+
+  await body("startDadeline")
+    .not()
+    .isEmpty()
+    .withMessage("startDadeline is required")
+    .run(req);
+
+  await body("endDadeline")
+    .not()
+    .isEmpty()
+    .withMessage("endDadeline is required")
+    .run(req);
+
+  let result = validationResult(req);
+  return {
+    errors: result.array(),
+    hasError: result.isEmpty() ? false : true,
+  };
+};
 const noticeboardController = {
   all: async (req, res) => {
     let data = await formModel.find().sort({ _id: -1 });
@@ -8,15 +46,22 @@ const noticeboardController = {
   },
   create: async (req, res) => {
     try {
+      let validator = await questionValidator(req);
+      if (validator.hasError) {
+        return res.status(422).json(validator);
+      }
       const data = req.body;
       let response = await formModel.create({
         document_name: data.document_name,
         doc_desc: data.doc_desc,
         questions: data.question,
+        range: data.range,
+        startDadeline: data.startDadeline,
+        endDadeline: data.endDadeline,
       });
 
       await response.save();
-      console.log(response);
+      // console.log(response);
       // return res.json(response);
       return res.status(201).json({ message: "Form data saved successfully" });
     } catch (error) {
