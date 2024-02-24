@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import CropOriginalIcon from "@mui/icons-material/CropOriginal";
@@ -8,18 +8,14 @@ import SubjectIcon from "@mui/icons-material/Subject";
 import NumericIcon from "@mui/icons-material/Numbers";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import FilterNoneIcon from "@mui/icons-material/FilterNone";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
 import { Typography } from "@mui/material";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Checkbox from "@mui/material/Checkbox";
 import Accordion from "@mui/material/Accordion";
-
-import { FcRightUp } from "react-icons/fc";
 import { BsTrash } from "react-icons/bs";
 import { Button, IconButton, MenuItem, Radio, Switch } from "@mui/material";
 import Select from "@mui/material/Select";
@@ -39,10 +35,14 @@ const Notice = () => {
     "Add Sort Desctiption"
   );
   const [documentName, setdocumentName] = useState("Untitled Document");
-  const [range, setRange] = useState();
-  const [startDadeline, setStartDadeline] = useState();
-  const [endDadeline, setEndDadeline] = useState();
-  const [error, setError] = useState([]);
+  const [range, setRange] = useState(null);
+  const [startDadeline, setStartDadeline] = useState(null);
+  const [endDadeline, setEndDadeline] = useState(null);
+  const [error, setError] = useState();
+  const [timeSelect, setTimeSelect] = useState(null);
+  const [thana, setThana] = useState(false);
+  const [branch, setBranch] = useState(false);
+  const [zonal, setZonal] = useState(false);
 
   const submitHandler = async () => {
     try {
@@ -59,18 +59,44 @@ const Notice = () => {
             doc_desc: documentDescription,
             question: question,
             range: range,
+            timeSelect: timeSelect,
             startDadeline: startDadeline,
             endDadeline: endDadeline,
+            thana: thana,
+            branch: branch,
+            zonal: zonal,
           }),
         }
       );
       let data = await response.json();
-      let jData = JSON.stringify(data?.errors);
-      console.log(error);
-      if (!response.ok) {
-        setError(jData);
-        throw new Error("Failed to fetch");
-      } else {
+      if (response.status === 422) {
+        setError({});
+        let tempErrors = {
+          questions: [],
+          range: [],
+          startDedeline: [],
+          endDadeline: [],
+          timeSelect: [],
+          thana: [],
+          branch: [],
+          zonal: [],
+        };
+        console.log(data);
+        data.errors.forEach((e, index) => {
+          console.log(e.path);
+          if (!tempErrors[e.path]) {
+            tempErrors[e.path] = []; // Initialize the array if it doesn't exist
+          }
+          tempErrors[e.path].push(
+            <li key={index} className="text-danger">
+              {e.msg}
+            </li>
+          );
+        });
+        setError(tempErrors);
+      }
+
+      if (response.ok) {
         // window.location.href = "/dashboard";
         window.location.replace("/dashboard");
       }
@@ -78,6 +104,40 @@ const Notice = () => {
       console.error("Error:", error.message);
     }
   };
+  const dateHandler = () => {
+    const date = new Date(startDadeline);
+    let day = date.getDate();
+    let newDate = +day + (+range - 1);
+    date.setDate(newDate);
+    const viewDate = new Date(date);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const formattedDate = `${viewDate.getDate()}-${
+      months[viewDate.getMonth()]
+    }-${viewDate.getFullYear()}`;
+    setEndDadeline(formattedDate);
+  };
+  // useEffect(() => {
+  //   console.log(zonal, "zone");
+  //   console.log(branch, "branch");
+  //   console.log(thana, "thana");
+  // }, [thana, branch, zonal]);
+
+  useEffect(() => {
+    dateHandler();
+  }, [startDadeline, range]);
   const rangeHandler = (e) => {
     setRange(e.target.value);
   };
@@ -361,14 +421,15 @@ const Notice = () => {
                 )}
                 <div className="add_footer d-flex justify-content-between align-items-center">
                   <div className="add_question_bottom_left">
-                    <Button size="small" className="footerButton fw-bold">
+                    {/* <Button size="small" className="footerButton fw-bold">
                       <FcRightUp className="fcRightUp" />
                       Answer Key
-                    </Button>
+                    </Button> */}
                   </div>
                   <div className="add_question_bottom">
                     <IconButton
                       aria-label="copy"
+                      title="copy"
                       onClick={() => {
                         copyQuestion(i);
                       }}
@@ -377,6 +438,7 @@ const Notice = () => {
                     </IconButton>
                     <IconButton
                       aria-label="delete"
+                      title="delete"
                       onClick={() => {
                         deleteQuestion(i);
                       }}
@@ -386,12 +448,13 @@ const Notice = () => {
                     <IconButton aria-label="copy">
                       <span className="text-secondary fs-4">required</span>
                       <Switch
-                        name="checkedA"
+                        name="checked"
                         color="primary"
+                        title="required"
                         onClick={() => requiredQuestion(i)}
                       />
                     </IconButton>
-                    <IconButton aria-label="delete">
+                    <IconButton aria-label="More Item">
                       <MoreVertIcon />
                     </IconButton>
                   </div>
@@ -400,11 +463,12 @@ const Notice = () => {
               <div className="question_edit d-flex flex-column gap-3 ms-3 h-75 py-3 px-2 rounded">
                 <AddCircleOutlineIcon
                   className="edit"
+                  titleAccess="New Question"
                   onClick={() => addMoreQuestion(i)}
                 />
-                <OndemandVideoIcon className="edit" />
+                {/* <OndemandVideoIcon className="edit" />
                 <CropOriginalIcon className="edit" />
-                <TextFieldsIcon className="edit" />
+                <TextFieldsIcon className="edit" /> */}
               </div>
             </div>
           ) : (
@@ -417,87 +481,161 @@ const Notice = () => {
 
   return (
     <>
-      <div className="card shadow col-md-8 m-auto mt-5">
+      <div className="card shadow col-md-8 m-auto ">
         <br /> <br />
-        <div className="card-header my-4">
-          <div class="mb-3">
-            <input
-              type="text"
-              class="fw-bold form-control fs-1 border-0 text-capitalize"
-              name="form"
-              id="form"
-              // value={documentName}
-              placeholder={documentName}
-              onChange={(e) => setdocumentName(e.target.value)}
-            />
+        <div className="card-header">
+          <div className="document-header">
+            <div class="mb-3">
+              <input
+                type="text"
+                class="fw-bold form-control fs-1 border-0 text-capitalize"
+                name="form"
+                id="form"
+                // value={documentName}
+                placeholder={documentName}
+                onChange={(e) => setdocumentName(e.target.value)}
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control w-100 fs-5 border-0 text-capitalize"
+                name="description"
+                id="description"
+                // value={documentDescription}
+                placeholder={documentDescription}
+                onChange={(e) => setdocumentDescription(e.target.value)}
+              />
+            </div>
           </div>
+          <div className="notice-type-range-dadeline">
+            <div className="d-flex justify-content-around align-items-center gap-3">
+              <div class="mb-3 w-25">
+                <label for="" class="form-label">
+                  Notice Type
+                </label>
+                <select
+                  className="form-select"
+                  onChange={rangeHandler}
+                  name="noticeType"
+                  id="noticeType"
+                >
+                  <option selected>Open this Select Menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                  <option value="7">Weackly</option>
+                  <option value="15">De-Weackly</option>
+                  <option value="10">Occation</option>
+                </select>
 
-          <div class="mb-3">
-            <input
-              type="text"
-              class="form-control w-100 fs-5 border-0 text-capitalize"
-              name="description"
-              id="description"
-              // value={documentDescription}
-              placeholder={documentDescription}
-              onChange={(e) => setdocumentDescription(e.target.value)}
-            />
-          </div>
-          <div className="d-flex justify-content-around align-items-center gap-3">
-            <div class="mb-3 w-25">
-              <label for="" class="form-label">
-                Notice Type
-              </label>
-              <select
-                class="form-select"
-                name="noticeType"
-                id="noticeType"
-                required
-                value={range}
-                onChange={rangeHandler}
-              >
-                <option selected>Select one</option>
-                <option value="1">Ones</option>
-                <option value="7">Weekly</option>
-                <option value="10">Occation</option>
-              </select>
-            </div>
-            <div class="mb-3 w-25">
-              <label for="" class="form-label">
-                Start Dadeline
-              </label>
-              <input
-                type="date"
-                class="form-control"
-                name="startDadeline"
-                id="startDadeline"
-                onChange={(e) => setStartDadeline(e.target.value)}
-              />
-            </div>
-            <div class="mb-3 w-25">
-              <label for="" class="form-label">
-                End Dadeline
-              </label>
-              <input
-                type="date"
-                class="form-control"
-                name="endDadeline"
-                id="endDadeline"
-                placeholder=""
-                onChange={(e) => setEndDadeline(e.target.value)}
-              />
+                <ul className="list-unstyled">{error?.range}</ul>
+              </div>
+              <div class="mb-3 w-25">
+                <label for="" class="form-label">
+                  Start Dadeline
+                </label>
+                <input
+                  type="Date"
+                  class="form-control"
+                  name="startDadeline"
+                  id="startDadeline"
+                  onChange={(e) => setStartDadeline(e.target.value)}
+                />
+                <ul className="list-unstyled">{error?.startDadeline}</ul>
+              </div>
+              <div class="mb-3 w-25">
+                <label for="" class="form-label">
+                  Time Dadeline
+                </label>
+                <input
+                  type="time"
+                  class="form-control"
+                  name="dadelineTime"
+                  id="dadelineTime"
+                  min="00:00"
+                  max="22:00"
+                  onChange={(e) => setTimeSelect(e.target.value)}
+                />
+                <ul className="list-unstyled">{error?.timeSelect}</ul>
+              </div>
             </div>
           </div>
-        <div>
-          {error?.map((err, index) => (
-            <div key={index}>
-              <p>Type: {err.type}</p>
-              <p>Message: {err.msg}</p>
-              <p>Path: {err.path}</p>
-              <p>Location: {err.location}</p>
+          <div className="notice-dadeline-show">
+            <div className="d-flex justify-content-around align-items-center gap-3">
+              <div className="data-permission">
+                <div className="notice-data-permission">
+                  <label class="form-label">Notice Data permission</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="thana"
+                    name="thana"
+                    onChange={(e) => setThana(e.target.checked)}
+                  />
+                  <label class="form-check-label" for="thana">
+                    Thana
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="branch"
+                    name="branch"
+                    onChange={(e) => setBranch(e.target.checked)}
+                  />
+                  <label class="form-check-label" for="branch">
+                    Branch
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="zonal"
+                    name="zonal"
+                    onChange={(e) => setZonal(e.target.checked)}
+                  />
+                  <label class="form-check-label" for="zonal">
+                    Zonal
+                  </label>
+                </div>
+                <ul>
+                  {error?.zonal}
+                </ul>
+              </div>
+
+              <div class="mb-3 w-25">
+                <label for="" class="form-label">
+                  Notice Range
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="No Value"
+                  value={range}
+                  disabled
+                />
+              </div>
+
+              <div class="mb-3 w-25">
+                <label for="" class="form-label">
+                  End Dadeline
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="endDadeline"
+                  id="endDadeline"
+                  disabled
+                  value={endDadeline}
+                />
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
         </div>
         <div className="card-body ">{questionUI()}</div>
         <div className=" py-3 px-3">
@@ -507,7 +645,6 @@ const Notice = () => {
           >
             Save
           </button>
-          <Button></Button>
         </div>
       </div>
     </>

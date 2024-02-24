@@ -64,6 +64,13 @@
 }
 .edit {
   cursor: pointer;
+  color: #1152a2;
+}
+.edit:hover {
+  color: white;
+  background: #1152a2;
+  font-weight: bold;
+  border-radius: 50%;
 }
 .dragIndicator {
   transform: "rotate(-90deg)";

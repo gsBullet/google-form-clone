@@ -13,10 +13,10 @@ const questionValidator = async (req) => {
     .isEmpty()
     .withMessage("document desc is required")
     .run(req);
-  await body("questions")
+  await body("timeSelect")
     .not()
     .isEmpty()
-    .withMessage("questions is required")
+    .withMessage("Dadeline Time is required")
     .run(req);
   await body("range").not().isEmpty().withMessage("range is required").run(req);
 
@@ -51,16 +51,18 @@ const noticeboardController = {
         return res.status(422).json(validator);
       }
       const data = req.body;
-      let response = await formModel.create({
-        document_name: data.document_name,
-        doc_desc: data.doc_desc,
-        questions: data.question,
-        range: data.range,
-        startDadeline: data.startDadeline,
-        endDadeline: data.endDadeline,
-      });
+      console.log(data);
+      // let response = await formModel.create({
+      //   document_name: data.document_name,
+      //   doc_desc: data.doc_desc,
+      //   questions: data.question,
+      //   range: data.range,
+      //   timeSelect: data.timeSelect,
+      //   startDadeline: data.startDadeline,
+      //   endDadeline: data.endDadeline,
+      // });
 
-      await response.save();
+      // await response.save();
       // console.log(response);
       // return res.json(response);
       return res.status(201).json({ message: "Form data saved successfully" });
