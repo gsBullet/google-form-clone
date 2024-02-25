@@ -13,4 +13,4 @@ router.use(noticeRoutes())
 router.use(answerRoutes())
 
 
-module.exports = router
+module.exports = () => router;

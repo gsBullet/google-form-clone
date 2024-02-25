@@ -52,17 +52,20 @@ const noticeboardController = {
       }
       const data = req.body;
       console.log(data);
-      // let response = await formModel.create({
-      //   document_name: data.document_name,
-      //   doc_desc: data.doc_desc,
-      //   questions: data.question,
-      //   range: data.range,
-      //   timeSelect: data.timeSelect,
-      //   startDadeline: data.startDadeline,
-      //   endDadeline: data.endDadeline,
-      // });
+      let response = await formModel.create({
+        document_name: data.document_name,
+        doc_desc: data.doc_desc,
+        questions: data.question,
+        range: data.range,
+        timeSelect: data.timeSelect,
+        thana: data.thana,
+        branch: data.branch,
+        zonal: data.zonal,
+        startDadeline: data.startDadeline,
+        endDadeline: data.endDadeline,
+      });
 
-      // await response.save();
+      await response.save();
       // console.log(response);
       // return res.json(response);
       return res.status(201).json({ message: "Form data saved successfully" });

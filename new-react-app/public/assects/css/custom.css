@@ -80,3 +80,13 @@
   font-size: small;
   margin-top: 20px;
 }
+#clock {
+  font-size: 1rem;
+}
+#clock span {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 2px solid red;
+  color: red;
+  font-weight: bold;
+}

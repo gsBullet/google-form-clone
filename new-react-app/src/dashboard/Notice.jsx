@@ -31,15 +31,13 @@ const Notice = () => {
       required: false,
     },
   ]);
-  const [documentDescription, setdocumentDescription] = useState(
-    "Add Sort Desctiption"
-  );
-  const [documentName, setdocumentName] = useState("Untitled Document");
+  const [documentDescription, setdocumentDescription] = useState();
+  const [documentName, setdocumentName] = useState();
   const [range, setRange] = useState(null);
   const [startDadeline, setStartDadeline] = useState(null);
   const [endDadeline, setEndDadeline] = useState(null);
   const [error, setError] = useState();
-  const [timeSelect, setTimeSelect] = useState(null);
+  const [timeSelect, setTimeSelect] = useState('00:00:00');
   const [thana, setThana] = useState(false);
   const [branch, setBranch] = useState(false);
   const [zonal, setZonal] = useState(false);
@@ -81,9 +79,9 @@ const Notice = () => {
           branch: [],
           zonal: [],
         };
-        console.log(data);
+        // console.log(data);
         data.errors.forEach((e, index) => {
-          console.log(e.path);
+          // console.log(e.path);
           if (!tempErrors[e.path]) {
             tempErrors[e.path] = []; // Initialize the array if it doesn't exist
           }
@@ -97,8 +95,9 @@ const Notice = () => {
       }
 
       if (response.ok) {
-        // window.location.href = "/dashboard";
-        window.location.replace("/dashboard");
+        window.location.href = "/dashboard";
+        // console.log(data);
+        // window.location.replace("/dashboard");
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -137,7 +136,8 @@ const Notice = () => {
 
   useEffect(() => {
     dateHandler();
-  }, [startDadeline, range]);
+  });
+
   const rangeHandler = (e) => {
     setRange(e.target.value);
   };
@@ -492,9 +492,10 @@ const Notice = () => {
                 name="form"
                 id="form"
                 // value={documentName}
-                placeholder={documentName}
+                placeholder="Untitled Document"
                 onChange={(e) => setdocumentName(e.target.value)}
               />
+              <ul className="list-unstyled">{error?.document_name}</ul>
             </div>
             <div class="mb-3">
               <input
@@ -503,9 +504,10 @@ const Notice = () => {
                 name="description"
                 id="description"
                 // value={documentDescription}
-                placeholder={documentDescription}
+                placeholder="Add Sort Desctiption"
                 onChange={(e) => setdocumentDescription(e.target.value)}
               />
+              <ul className="list-unstyled">{error?.doc_desc}</ul>
             </div>
           </div>
           <div className="notice-type-range-dadeline">
@@ -524,8 +526,8 @@ const Notice = () => {
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
-                  <option value="7">Weackly</option>
-                  <option value="15">De-Weackly</option>
+                  <option value="7">Weeckly</option>
+                  <option value="15">De-Weeckly</option>
                   <option value="10">Occation</option>
                 </select>
 
@@ -603,9 +605,7 @@ const Notice = () => {
                     Zonal
                   </label>
                 </div>
-                <ul>
-                  {error?.zonal}
-                </ul>
+                <ul>{error?.zonal}</ul>
               </div>
 
               <div class="mb-3 w-25">

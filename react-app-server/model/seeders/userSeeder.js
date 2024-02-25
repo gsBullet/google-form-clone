@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const dbConnector = require("../../config/dbConnector");
-var bcrypt = require('bcryptjs');
+var bcrypt = require("bcryptjs");
 const userModel = require("../userModel");
 
 module.exports = () =>

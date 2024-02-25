@@ -45,6 +45,7 @@ module.exports = {
       _id: id,
     });
     if (user) {
+      next()
       return res.status(200).json(user);
     } else {
       console.log("authorized fails");

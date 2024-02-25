@@ -15,6 +15,13 @@ const QuestionAnswer = () => {
       data: [],
     },
   ]);
+  const [hours,setHours] = useState(null)
+const [minutes, setMinutes] = useState(null);
+const [seconds, setSeconds] = useState(null);
+
+
+
+
   const questionReplay = async () => {
     try {
       let response = await fetch(`http://localhost:5000/get-notice/${id}`, {
@@ -97,18 +104,110 @@ const QuestionAnswer = () => {
     }
   };
 
+  const myTime = async()=>{
+     function calculateRemainingTime() {
+       const now = new Date();
+       const targetTime = new Date(now);
+   
+       // Extract hours and minutes from notice.timeSelect
+       const fixTime =  notice.timeSelect;
+       // console.log(fixTime);
+       const selectTime = fixTime || "00:00";
+       const [hours, minutes] =  selectTime.split(":").map(Number);
+   
+       // Set target time using hours and minutes from notice.timeSelect
+        targetTime.setHours(hours, minutes, 0, 0);
+   
+       // If current time is after the target time, set target time to the next day
+       if (
+         now.getHours() > hours ||
+         (now.getHours() === hours && now.getMinutes() > minutes)
+       ) {
+          targetTime.setDate(targetTime.getDate() + 1);
+       }
+   
+       // Calculate remaining time in milliseconds
+       const remainingTimeMs = targetTime - now;
+   
+       // Convert remaining time from milliseconds to hours, minutes, and seconds
+       const hoursRemaining = Math.floor(remainingTimeMs / (1000 * 60 * 60));
+       const minutesRemaining =  Math.floor(
+         (remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60)
+       );
+       const secondsRemaining = Math.floor((remainingTimeMs % (1000 * 60)) / 1000);
+   
+       return {
+         hours: hoursRemaining,
+         minutes: minutesRemaining,
+         seconds: secondsRemaining,
+       };
+     }
+     // Example usage:
+   
+     // const noticeData = {
+     //   selectTime: (notice?.timeSelect || "").toString(), // Handle null or undefined case
+     // };
+   
+      function updateClock() {
+       const timer =  calculateRemainingTime();
+       setHours(timer.hours)
+       setMinutes(timer.minutes)
+       setSeconds(timer.seconds)
+   
+     
+     }
+     setInterval(updateClock, 1000);
+       updateClock();
+
+  }
+ 
+
+
+
+
+
+
+
+  
+  useEffect(() => {
+    // dayCount();
+    myTime()
+  }); // Empty dependency array for running once on mount
+
+
+
+
+  
+
   return (
     <>
       <div className="container">
+        <div className="hp my-5">{JSON.stringify(notice)}</div>
         <div className="card">
           <div className="card-header">
             <Typography className="text-center">
               {notice.document_name}
             </Typography>
             <Typography className="text-center">{notice.doc_desc}</Typography>
+            <div className="styke d-flex flex-nowrap gap-3">
+              <div id="clock">
+                <span id="hours">{hours}</span>:<span id="minutes">{minutes}</span>:
+                <span id="seconds">{seconds}</span>
+              </div>
+              <div className="text-primary">
+                Notice Start: {notice?.startDadeline}
+              </div>
+              <div className="text-primary">Notice Range:{notice?.range}</div>
+              <div className="text-primary">
+                Notice End:{notice?.endDadeline}
+              </div>
+            </div>
           </div>
           {notice?.questions?.map((question, qIndex) => (
-            <div className="card-body col-lg-6 col-md-8 col-sm-12 m-auto border  shadow mt-3" key={qIndex}>
+            <div
+              className="card-body col-lg-6 col-md-8 col-sm-12 m-auto border  shadow mt-3"
+              key={qIndex}
+            >
               <Typography>
                 {qIndex + 1}. {question?.questionText}{" "}
               </Typography>
@@ -183,3 +282,5 @@ const QuestionAnswer = () => {
 };
 
 export default QuestionAnswer;
+
+<script src="script.js"></script>;

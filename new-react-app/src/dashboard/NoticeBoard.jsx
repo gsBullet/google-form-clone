@@ -15,15 +15,15 @@ const NoticeBoard = () => {
       });
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch");
-      } else {
+      if (response.ok) {
         // console.log(data);
         setNoticeData(data);
+      } else {
+        throw new Error("Failed to fetch");
       }
     } catch (error) {
-      console.error("Error fetching notice data:", error);
       // Handle error
+      console.error("Error fetching notice data:", error);
     }
   };
 
@@ -40,6 +40,7 @@ const NoticeBoard = () => {
       const data = await response.json();
       if (response.ok) {
         console.log(data);
+        window.location.reload();
       }
     }
   };
@@ -83,6 +84,7 @@ const NoticeBoard = () => {
                   <th>Action</th>
                 </tr>
               </thead>
+             
               <tbody>
                 {noticeData.map((notice, index) => (
                   <tr key={index}>
@@ -95,9 +97,9 @@ const NoticeBoard = () => {
                           className="btn btn-sm btn-info"
                           to={`notice-answer/${notice._id}`}
                         >
-                          <i class="fa fa-eye" aria-hidden="true"></i>
+                          <i class="fa fa-reply" aria-hidden="true"></i>
                         </Link>
-                        <a className="btn btn-sm btn-success" href="/">
+                        {/* <a className="btn btn-sm btn-success" href="/">
                           <i class="fa fa-edit" aria-hidden="true"></i>
                         </a>
                         <a
@@ -106,7 +108,7 @@ const NoticeBoard = () => {
                           href="/dashboard"
                         >
                           <i class="fa fa-trash" aria-hidden="true"></i>
-                        </a>
+                        </a> */}
                       </div>
                     </td>
                   </tr>
